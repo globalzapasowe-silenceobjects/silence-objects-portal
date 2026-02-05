@@ -1,7 +1,5 @@
 {
   "buildCommand": "pnpm install && pnpm --filter=portal build",
-  "installCommand": "pnpm install",
-  "framework": "nextjs",
   "outputDirectory": "apps/portal/.next",
-  "cwd": "apps/portal"
+  "installCommand": "pnpm install"
 }
