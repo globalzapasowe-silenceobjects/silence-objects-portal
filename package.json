@@ -1,13 +1,15 @@
 {
-  "name": "patternlens-ecosystem",
+  "name": "silence-objects-framework",
   "private": true,
   "scripts": {
-    "dev": "cd apps/portal && pnpm dev",
-    "build": "cd apps/portal && pnpm build"
+    "dev": "pnpm --filter=portal dev",
+    "build": "pnpm --filter=portal build",
+    "lint": "pnpm --filter=portal lint",
+    "clean": "rm -rf apps/portal/.next node_modules apps/portal/node_modules packages/ui/node_modules"
   },
   "devDependencies": {
-    "@types/node": "^22",
-    "@types/react": "^19",
+    "@types/node": "^20",
+    "@types/react": "^18",
     "typescript": "^5"
   }
 }

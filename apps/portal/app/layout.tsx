@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "PatternLabs Investor Portal",
-  description: "Real-time metrics and KPIs for PatternLabs investors",
+  title: "PatternLabs Portal",
+  description: "SILENCE.OBJECTS — Investor Dashboard",
 };
 
 export default function RootLayout({
@@ -13,7 +13,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body>{children}</body>
+      <body className="min-h-screen bg-zinc-950 text-zinc-100 antialiased">
+        {children}
+      </body>
     </html>
   );
 }

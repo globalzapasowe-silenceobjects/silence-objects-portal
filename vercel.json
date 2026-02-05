@@ -1,5 +1,7 @@
 {
-  "buildCommand": "pnpm install && pnpm --filter=portal build",
-  "outputDirectory": "apps/portal/.next",
-  "installCommand": "pnpm install"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "buildCommand": "pnpm --filter=portal build",
+  "installCommand": "pnpm install",
+  "outputDirectory": "apps/portal/.next"
 }
