@@ -1,16 +1,7 @@
 {
-  "buildCommand": "pnpm build",
-  "installCommand": "pnpm install --frozen-lockfile",
-  "framework": null,
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
-      ]
-    }
-  ]
+  "buildCommand": "pnpm install && pnpm --filter=portal build",
+  "installCommand": "pnpm install",
+  "framework": "nextjs",
+  "outputDirectory": "apps/portal/.next",
+  "cwd": "apps/portal"
 }
