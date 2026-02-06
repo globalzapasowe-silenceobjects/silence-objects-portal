@@ -1,15 +1,14 @@
-import * as React from 'react';
+import type { ReactNode } from "react";
 
 interface SectionProps {
+  children: ReactNode;
   title?: string;
-  children: React.ReactNode;
-  className?: string;
 }
 
-export function Section({ title, children, className = '' }: SectionProps) {
+export function Section({ children, title }: SectionProps) {
   return (
-    <section className={`rounded-lg bg-white p-6 shadow dark:bg-gray-800 ${className}`}>
-      {title && <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">{title}</h2>}
+    <section className="mb-8">
+      {title && <h2 className="text-xl font-bold text-zinc-100 mb-4">{title}</h2>}
       {children}
     </section>
   );

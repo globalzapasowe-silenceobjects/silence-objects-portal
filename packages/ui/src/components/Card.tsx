@@ -1,13 +1,14 @@
-import * as React from 'react';
+import type { ReactNode } from "react";
 
 interface CardProps {
-  children: React.ReactNode;
-  className?: string;
+  children: ReactNode;
+  title?: string;
 }
 
-export function Card({ children, className = '' }: CardProps) {
+export function Card({ children, title }: CardProps) {
   return (
-    <div className={`rounded-lg bg-white p-6 shadow dark:bg-gray-800 ${className}`}>
+    <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-4 md:p-6">
+      {title && <h3 className="text-lg font-semibold text-zinc-100 mb-4">{title}</h3>}
       {children}
     </div>
   );

@@ -1,5 +1,5 @@
 {
-  "name": "silence-objects-framework",
+  "name": "silence-objects-portal",
   "private": true,
   "scripts": {
     "dev": "pnpm --filter=portal dev",

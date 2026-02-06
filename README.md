@@ -1,57 +1,26 @@
-# PatternLens Ecosystem
+# silence-objects-portal
 
-Production monorepo: PatternLens (consumer PWA + mobile) + patternsLab (B2B/institutions) + portal (investor/admin).
+SILENCE.OBJECTS Portal — PatternLabs B2B SaaS Dashboard
 
-## Structure
+## Stack
+- Next.js 14 + React 18 + TypeScript strict
+- Tailwind CSS 3 + dark mode
+- pnpm monorepo (apps/portal + packages/ui)
+- Vercel deploy
 
-- `apps/patternlens` → Consumer PWA + Capacitor (iOS/Android)
-- `apps/patternslab` → B2B platform (workspace, experiments, compliance)
-- `apps/portal` → Investor & admin dashboard (default: investor view)
-- `apps/investor` → Public deck (patternslab.work)
-- `apps/docs` → Framework docs
-- `packages/ui` → Design system v4.0 (Tailwind 4 + shadcn + CVA)
-- `packages/db` → Supabase + Drizzle schema
-- `packages/ai` → Claude/Ollama/Whisper adapters
-- `packages/contracts` → Zod validators + TS types
-- `packages/config` → Shared config (ESLint, TS, feature flags)
-
-## Commands
-
+## Dev
 ```bash
 pnpm install
-pnpm dev              # Start all apps
-pnpm build            # Build all apps
-pnpm lint             # Lint all packages
-pnpm test             # Run tests
-# ═══════════════════════════════════════════════════════════════════════════════
-# PATTERNLENS ECOSYSTEM — ROOT + PACKAGES/UI + APPS/PATTERNLENS
-# ═══════════════════════════════════════════════════════════════════════════════
+pnpm dev
+```
 
-cd ~ && rm -rf patternlens-ecosystem && mkdir -p patternlens-ecosystem && cd patternlens-ecosystem
+## Structure
+```
+apps/portal/         — Next.js dashboard app
+packages/ui/         — shared design system
+```
 
-mkdir -p packages/ui/components packages/ui/lib packages/ui/logos
-mkdir -p apps/patternlens/app/(tabs) apps/patternlens/public
-mkdir -p .github/workflows
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# ROOT
-# ═══════════════════════════════════════════════════════════════════════════════
-
-cat > package.json << 'EOF'
-{
-  "name": "patternlens-ecosystem",
-  "private": true,
-  "packageManager": "pnpm@9.15.0",
-  "scripts": {
-    "dev": "turbo dev",
-    "build": "turbo build",
-    "lint": "turbo lint",
-    "test": "vitest",
-    "clean": "turbo clean && rm -rf node_modules"
-  },
-  "devDependencies": {
-    "turbo": "^2.3.0",
-    "typescript": "^5.7.0",
-    "vitest": "^2.1.0"
-  }
-}
+## Domains
+- patternslab.app — portal dashboard
+- patternslab.work — investor portal
+- patternlens.app — consumer PWA (separate repo)

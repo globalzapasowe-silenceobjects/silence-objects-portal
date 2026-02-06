@@ -1,21 +1,16 @@
 import type { ReactNode } from "react";
-import { DashboardLayout } from "./DashboardLayout";
-
-const nav = [
-  { label: "Overview", href: "/investor/dashboard", active: true },
-  { label: "Metrics", href: "/investor/metrics" },
-  { label: "Pipeline", href: "/investor/pipeline" },
-  { label: "Documents", href: "/investor/documents" },
-];
 
 interface InvestorLayoutProps {
   children: ReactNode;
-  user?: {
-    name: string;
-    email: string;
-  };
 }
 
-export function InvestorLayout({ children, user }: InvestorLayoutProps) {
-  return <DashboardLayout navigation={nav} user={user}>{children}</DashboardLayout>;
+export function InvestorLayout({ children }: InvestorLayoutProps) {
+  return (
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+      <header className="border-b border-zinc-800 px-4 py-4 md:px-8">
+        <h1 className="text-lg font-bold">PatternLabs — Investor Portal</h1>
+      </header>
+      <main className="p-4 md:p-8">{children}</main>
+    </div>
+  );
 }

@@ -3,14 +3,10 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "PatternLabs Portal",
-  description: "SILENCE.OBJECTS — Investor Dashboard",
+  description: "SILENCE.OBJECTS — Dashboard & Investor Portal",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark">
       <body className="min-h-screen bg-zinc-950 text-zinc-100 antialiased">

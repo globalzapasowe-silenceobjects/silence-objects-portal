@@ -1,36 +1,15 @@
 import type { ReactNode } from "react";
-import { DashboardLayout } from "./DashboardLayout";
-
-const nav = [
-  { label: "Dashboard", href: "/dashboard", active: true },
-  { label: "Workspaces", href: "/dashboard/workspace" },
-  { label: "Experiments", href: "/dashboard/experiments" },
-  { label: "Compliance", href: "/dashboard/compliance" },
-  { label: "Team", href: "/dashboard/team" },
-];
 
 interface B2BLayoutProps {
   children: ReactNode;
-  workspaceName?: string;
-  user?: {
-    name: string;
-    email: string;
-  };
+  header?: ReactNode;
 }
 
-export function B2BLayout({ children, workspaceName, user }: B2BLayoutProps) {
-  const header = workspaceName ? (
-    <div className="text-sm text-slate-500 dark:text-slate-400">
-      Workspace:{" "}
-      <span className="font-semibold text-slate-900 dark:text-slate-50">
-        {workspaceName}
-      </span>
-    </div>
-  ) : undefined;
-
+export function B2BLayout({ children, header }: B2BLayoutProps) {
   return (
-    <DashboardLayout navigation={nav} user={user} header={header}>
-      {children}
-    </DashboardLayout>
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+      {header && <header className="border-b border-zinc-800 px-4 py-4 md:px-8">{header}</header>}
+      <main className="p-4 md:p-8">{children}</main>
+    </div>
   );
 }

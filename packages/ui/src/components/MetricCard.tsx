@@ -1,23 +1,17 @@
-import * as React from 'react';
-
 interface MetricCardProps {
-  title: string;
-  value: string | number;
-  subtitle?: string;
-  icon?: React.ReactNode;
+  label: string;
+  value: string;
+  trend?: string;
+  target?: string;
 }
 
-export function MetricCard({ title, value, subtitle, icon }: MetricCardProps) {
+export function MetricCard({ label, value, trend, target }: MetricCardProps) {
   return (
-    <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{title}</p>
-          <p className="mt-2 text-3xl font-semibold text-gray-900 dark:text-white">{value}</p>
-          {subtitle && <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{subtitle}</p>}
-        </div>
-        {icon && <div className="text-gray-400">{icon}</div>}
-      </div>
+    <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-4 md:p-6">
+      <p className="text-xs text-zinc-500 uppercase tracking-wide">{label}</p>
+      <p className="text-lg md:text-2xl font-bold text-zinc-100 mt-1">{value}</p>
+      {trend && <p className="text-xs text-emerald-400 mt-1">{trend}</p>}
+      {target && <p className="text-xs text-zinc-500 mt-1">Target: {target}</p>}
     </div>
   );
 }
