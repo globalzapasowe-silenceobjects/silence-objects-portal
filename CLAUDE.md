@@ -4,7 +4,7 @@
 
 SILENCE.OBJECTS is a B2B SaaS Dashboard & Investor Portal for PatternLabs. It provides financial metrics tracking (ARR, MRR, DAU, Churn, LTV/CAC, Runway, NRR) with role-based views for investors, admins, and B2B consumers. Dark-themed professional UI deployed on Vercel.
 
-**Current state**: Foundation phase. Portal app is live with shared UI components, typed contracts, event bus, 12 agent scaffolds, CI/CD pipelines, and shared tooling. Build and lint pass. The DIPLO BIBLE v3 plans 15 packages and 3 apps — core infrastructure is in place, domain packages and additional apps are next.
+**Current state**: Structural completion. All 15 planned packages exist (8 open with real logic, 7 closed stubs). All 3 apps scaffolded (portal live, patternlens + patternslab scaffolds). 12 agent scaffolds (orchestrator + sentinel implemented). CI/CD, Turborepo, shared tooling all operational. Build and lint pass across all apps.
 
 **Build status**: PASSING — `pnpm build` and `pnpm lint` both succeed.
 
@@ -14,7 +14,7 @@ SILENCE.OBJECTS is a B2B SaaS Dashboard & Investor Portal for PatternLabs. It pr
 - **Language**: TypeScript 5 (strict mode)
 - **Styling**: Tailwind CSS 3.4.1, dark theme (Zinc palette, `bg-zinc-950`/`text-zinc-100`)
 - **Monorepo**: pnpm 10.x workspaces (`apps/*`, `packages/*`, `tooling/*`, `agents/*`)
-- **Build orchestration**: Turborepo (`turbo.json`)
+- **Build orchestration**: Turborepo v2 (`turbo.json`, `tasks` API)
 - **Deployment**: Vercel (nextjs framework preset)
 - **CI/CD**: GitHub Actions (ci, deploy, security, publish)
 - **Planned integrations**: Supabase (auth/db), Anthropic API — neither wired up
@@ -24,7 +24,10 @@ SILENCE.OBJECTS is a B2B SaaS Dashboard & Investor Portal for PatternLabs. It pr
 ```
 SILENCE.OBJECTS/
 ├── apps/
-│   └── portal/                     # Next.js 14 dashboard — primary app
+│   ├── portal/                     # Next.js 14 dashboard — primary app (port 3000)
+│   ├── patternlens/                # Consumer PWA scaffold (port 3001)
+│   └── patternslab/                # B2B institutional scaffold (port 3002)
+│   # Portal details:
 │       ├── app/
 │       │   ├── layout.tsx          # Root layout (dark theme, metadata)
 │       │   ├── page.tsx            # Dashboard home (uses @silence/ui Card)
@@ -64,12 +67,25 @@ SILENCE.OBJECTS/
 │   │   ├── tsconfig.json          # Extends tooling/ts-config/library.json
 │   │   └── package.json           # Depends on @silence/contracts
 │   │
-│   └── ui/                         # @silence/ui — shared design system
-│       ├── src/
-│       │   ├── index.ts            # Barrel: layouts + components
-│       │   ├── components/         # Card, Badge, MetricCard, KpiGrid, Section, DataTable
-│       │   └── layouts/            # PageLayout, DashboardLayout, InvestorLayout, ConsumerLayout, B2BLayout
-│       └── package.json            # Peer dep: react ^18.3.1
+│   ├── ui/                         # @silence/ui — shared design system
+│   │   ├── src/
+│   │   │   ├── index.ts            # Barrel: layouts + components
+│   │   │   ├── components/         # Card, Badge, MetricCard, KpiGrid, Section, DataTable
+│   │   │   └── layouts/            # PageLayout, DashboardLayout, InvestorLayout, ConsumerLayout, B2BLayout
+│   │   └── package.json            # Peer dep: react ^18.3.1
+│   │
+│   ├── core/                       # @silence/core — KPI calcs, tenant context, multi-tenancy
+│   ├── archetypes/                 # @silence/archetypes — archetype registry + trait matching
+│   ├── symbolic/                   # @silence/symbolic — symbol engine + sequences
+│   ├── language/                   # @silence/language — edge PII scanner + redaction
+│   ├── validator/                  # @silence/validator — edge validation rules
+│   ├── voice/                      # @silence/voice [CLOSED]
+│   ├── ai/                         # @silence/ai [CLOSED]
+│   ├── predictive/                 # @silence/predictive [CLOSED]
+│   ├── safety/                     # @silence/safety [CLOSED]
+│   ├── medical/                    # @silence/medical [CLOSED]
+│   ├── legal/                      # @silence/legal [CLOSED]
+│   └── linkedin-agent/             # @silence/linkedin-agent [CLOSED]
 │
 ├── agents/                          # Agent army (12 agents)
 │   ├── orchestrator/               # @silence/agent-orchestrator — meta-agent (IMPLEMENTED)
@@ -336,8 +352,8 @@ Audit date: 2026-02-06. Comparison of planned architecture (DIPLO BIBLE v3) agai
 
 | Category | Planned | Exists | Coverage |
 |---|---|---|---|
-| **packages/** | 15 | 3 (`contracts`, `events`, `ui`) | **20%** |
-| **apps/** | 3 (`portal`, `patternlens`, `patternslab`) | 1 (`portal`) | **33%** |
+| **packages/** | 15 | 15 (8 open with logic, 7 closed stubs) | **100%** |
+| **apps/** | 3 (`portal`, `patternlens`, `patternslab`) | 3 (portal live, 2 scaffolds) | **100%** |
 | **agents/** | 12 | 12 (2 implemented, 10 stubs) | **100% scaffolded** |
 | **docs/** | 15 files | 14 files | **93%** |
 | **tooling/** | 3 dirs | 3 dirs (`ts-config`, `eslint-config`, `generators`) | **100%** |
@@ -346,20 +362,13 @@ Audit date: 2026-02-06. Comparison of planned architecture (DIPLO BIBLE v3) agai
 
 ### Remaining Gaps
 
-#### Packages (12 not yet created)
-- `core`, `archetypes`, `symbolic`, `language`, `validator` — open modules
-- `voice`, `ai`, `predictive`, `safety`, `medical`, `legal`, `linkedin-agent` — closed modules
-
-#### Apps (2 not yet created)
-- `patternlens` — Consumer PWA
-- `patternslab` — B2B institutional
-
 #### Infrastructure
 - **No database** — Supabase planned but not wired
 - **No auth** — No authentication/RBAC
 - **No testing** — No test framework configured
 - **No pre-commit hooks** — No Husky/lint-staged
 - **Agent implementations** — 10 of 12 agents are stubs with TODO markers
+- **Closed packages** — 7 proprietary modules are placeholder stubs
 - **No `"use client"` boundaries** — Only `error.tsx` is a client component; interactivity will require more
 
 ### Next Steps (Priority Order)
@@ -367,7 +376,7 @@ Audit date: 2026-02-06. Comparison of planned architecture (DIPLO BIBLE v3) agai
 1. **Wire Supabase** — Connect auth and database to replace mock data
 2. **Add test framework** — Vitest for packages, Playwright for portal E2E
 3. **Implement agent logic** — Start with `analytics-reporter` (closest to existing KPI data)
-4. **Create `@silence/core`** — Core business logic shared across packages
-5. **Build `patternlens` app** — Consumer PWA
+4. **Build patternlens pages** — Consumer PWA feature pages beyond scaffold
+5. **Build patternslab pages** — B2B institutional feature pages beyond scaffold
 6. **Add pre-commit hooks** — Husky + lint-staged for quality gates
-7. **Implement remaining packages** — Domain-specific modules per DIPLO BIBLE
+7. **Implement closed packages** — Domain-specific logic for proprietary modules
