@@ -1,15 +1,18 @@
 {
-  "name": "silence-objects-portal",
+  "name": "silence-objects",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter=portal dev",
-    "build": "pnpm --filter=portal build",
-    "lint": "pnpm --filter=portal lint",
-    "clean": "rm -rf apps/portal/.next node_modules apps/portal/node_modules packages/ui/node_modules"
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "clean": "turbo clean && rm -rf node_modules",
+    "typecheck": "turbo typecheck"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
+    "turbo": "^2",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "pnpm@10.28.2"
 }
