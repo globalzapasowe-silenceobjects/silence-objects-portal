@@ -8,3 +8,7 @@ node_modules/
 dist/
 out/
 .turbo/
+.vercel
+.env*.local
+
+package-lock.json
