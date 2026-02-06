@@ -1,6 +1,7 @@
-Root Directory: (EMPTY)
-Framework Preset: Next.js
-Install Command: pnpm install
-Build Command: pnpm --filter=portal build
-Output Directory: apps/portal/.next
-Node.js Version: 18.x
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm --filter=portal build",
+  "outputDirectory": "apps/portal/.next"
+}
