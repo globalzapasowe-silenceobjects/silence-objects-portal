@@ -9,3 +9,5 @@ dist
 .turbo
 .claude/
 SILENCE_OBJECTS_MONOREPO/
+
+.vercel
