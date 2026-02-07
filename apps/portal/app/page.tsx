@@ -20,7 +20,7 @@ export default function DashboardPage() {
           <Link
             key={tab.id}
             href={tab.href}
-            className={tab.active
+            className={'active' in tab && tab.active
               ? "px-4 py-2 rounded-lg bg-zinc-100 text-zinc-950 font-medium text-sm"
               : "px-4 py-2 rounded-lg bg-zinc-800 text-zinc-400 text-sm hover:bg-zinc-700"
             }
