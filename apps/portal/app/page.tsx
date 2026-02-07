@@ -1,529 +1,887 @@
 import Link from "next/link";
+import {
+  SAFETY_STATUS,
+  SYSTEM_FLOW,
+  MONETIZATION,
+  SAFETY_LAYERS,
+  CRISIS_DATA,
+  AGENT_CHAIN,
+  REPORTS_CONFIDENCE,
+  MODULE_STATUS,
+  PAYWALL_FUNNEL,
+  REVENUE_PROJECTION,
+  PHASE_PROGRESS,
+  CI_CD_STATUS,
+  RECENT_EVENTS,
+} from "./data/mock";
 
+// ─────────────────────────────────────────────────────────────
+// Tabs
+// ─────────────────────────────────────────────────────────────
 const TABS = [
-  { id: "overview", label: "Overview" },
+  { id: "command-center", label: "Command Center", active: true },
+  { id: "investor", label: "Investor", href: "/investor/dashboard" },
   { id: "patternlens", label: "PatternLens" },
   { id: "patternslab", label: "PatternsLab" },
   { id: "modules", label: "Modules" },
   { id: "opensource", label: "Open Source" },
 ] as const;
 
-const METRICS = [
-  { label: "ARR", value: "104,000 PLN", trend: "+23% QoQ", spark: [40, 52, 61, 68, 78, 100] },
-  { label: "MRR", value: "8,667 PLN", trend: "+18% MoM", spark: [48, 59, 72, 82, 94, 100] },
-  { label: "DAU", value: "342", trend: "+12% WoW", spark: [35, 42, 55, 68, 82, 100] },
-  { label: "Churn", value: "2.1%", trend: "-0.3pp", spark: [100, 88, 72, 60, 48, 35] },
-  { label: "LTV/CAC", value: "4.2x", spark: [30, 45, 58, 72, 85, 100] },
-  { label: "Conversion", value: "12.8%", spark: [50, 55, 65, 75, 85, 100] },
-  { label: "Runway", value: "18 months", spark: [100, 95, 90, 85, 80, 75] },
-  { label: "NRR", value: "108%", spark: [70, 78, 85, 92, 100, 108] },
-] as const;
-
-const MODULES = [
-  { name: "@silence/contracts", status: "ready", type: "open", desc: "TypeScript types — single source of truth", health: "green" },
-  { name: "@silence/events", status: "ready", type: "open", desc: "Typed event bus", health: "green" },
-  { name: "@silence/core", status: "ready", type: "open", desc: "Pattern detection engine (4-phase protocol)", health: "green" },
-  { name: "@silence/archetypes", status: "ready", type: "open", desc: "12 Jungian behavioral pattern classification", health: "green" },
-  { name: "@silence/ui", status: "ready", type: "open", desc: "Design system — Tailwind + dark mode", health: "green" },
-  { name: "@silence/language", status: "ready", type: "open", desc: "Forbidden vocabulary guardrails", health: "green" },
-  { name: "@silence/validator", status: "ready", type: "open", desc: "Contract & language audit", health: "green" },
-  { name: "@silence/symbolic", status: "planned", type: "open", desc: "Symbolic pattern analysis", health: "gray" },
-  { name: "@silence/voice", status: "ready", type: "closed", desc: "Voice input — Whisper, media recorder, offline queue", health: "green" },
-  { name: "@silence/ai", status: "planned", type: "closed", desc: "Claude integration — dual-lens interpretation", health: "gray" },
-  { name: "@silence/predictive", status: "planned", type: "closed", desc: "Predictive pattern modeling", health: "gray" },
-  { name: "@silence/safety", status: "ready", type: "closed", desc: "3-layer crisis detection with resource mapping", health: "green" },
-  { name: "@silence/medical", status: "planned", type: "closed", desc: "Medical-grade pattern compliance", health: "gray" },
-  { name: "@silence/legal", status: "planned", type: "closed", desc: "Legal compliance & data sovereignty", health: "gray" },
-  { name: "@silence/linkedin-agent", status: "planned", type: "closed", desc: "LinkedIn growth automation", health: "gray" },
-] as const;
-
-const ARCHETYPES = [
-  { name: "Creator", icon: "C", color: "bg-violet-500/20 text-violet-400", desc: "Expresses through making, building, and artistic transformation" },
-  { name: "Ruler", icon: "R", color: "bg-amber-500/20 text-amber-400", desc: "Seeks control, structure, and systemic organization" },
-  { name: "Caregiver", icon: "G", color: "bg-emerald-500/20 text-emerald-400", desc: "Moves through nurturing, protection, and sacrifice" },
-  { name: "Explorer", icon: "E", color: "bg-blue-500/20 text-blue-400", desc: "Driven by freedom, discovery, and boundary-pushing" },
-  { name: "Sage", icon: "S", color: "bg-indigo-500/20 text-indigo-400", desc: "Pursues understanding, analysis, and pattern recognition" },
-  { name: "Hero", icon: "H", color: "bg-red-500/20 text-red-400", desc: "Confronts challenges through courage and mastery" },
-  { name: "Rebel", icon: "B", color: "bg-orange-500/20 text-orange-400", desc: "Disrupts, transforms, and challenges the status quo" },
-  { name: "Magician", icon: "M", color: "bg-purple-500/20 text-purple-400", desc: "Transforms reality through vision and catalytic action" },
-  { name: "Lover", icon: "L", color: "bg-pink-500/20 text-pink-400", desc: "Seeks connection, beauty, and passionate engagement" },
-  { name: "Jester", icon: "J", color: "bg-yellow-500/20 text-yellow-400", desc: "Uses humor, play, and reframing to navigate tension" },
-  { name: "Innocent", icon: "I", color: "bg-cyan-500/20 text-cyan-400", desc: "Moves through trust, optimism, and simplicity-seeking" },
-  { name: "Orphan", icon: "O", color: "bg-zinc-500/20 text-zinc-400", desc: "Navigates through resilience, belonging, and solidarity" },
-] as const;
-
-const APPS = [
-  { name: "PatternLens", url: "silence-patternlens.vercel.app", status: "live", desc: "Consumer PWA — structural pattern analysis with dual-lens interpretation" },
-  { name: "PatternsLab", url: "patternslab.work", status: "live", desc: "B2B institutional — multi-tenant SaaS for organizations" },
-  { name: "Portal", url: "silence-portal.vercel.app", status: "live", desc: "Dashboard — KPI, investor view, module control" },
-] as const;
-
-const GROWTH = [
-  { label: "Users (Free)", values: [120, 245, 420, 608], months: ["Nov", "Dec", "Jan", "Feb"] },
-  { label: "Users (Pro)", values: [22, 41, 67, 89], months: ["Nov", "Dec", "Jan", "Feb"] },
-  { label: "Retention (30d)", values: [68, 72, 78, 82], months: ["Nov", "Dec", "Jan", "Feb"], suffix: "%" },
-] as const;
-
-const EVENTS = [
-  { time: "2 min ago", event: "PatternCreated", detail: "New object analyzed — Creator archetype detected", type: "info" },
-  { time: "15 min ago", event: "ArchetypeShift", detail: "User #342: Explorer -> Sage transition observed", type: "info" },
-  { time: "1h ago", event: "CrisisDetected", detail: "Safety layer triggered — resources provided", type: "warn" },
-  { time: "3h ago", event: "DeployCompleted", detail: "Portal v5.0 deployed to production", type: "success" },
-  { time: "5h ago", event: "BuildPassed", detail: "All 3 apps built successfully — Sentinel cleared", type: "success" },
-  { time: "8h ago", event: "NewUser", detail: "User signup — onboarding flow initiated", type: "info" },
-] as const;
-
-const FUNNEL = [
-  { stage: "Visitors", count: 4200, pct: 100 },
-  { stage: "Signups", count: 608, pct: 14.5 },
-  { stage: "Active (7d)", count: 342, pct: 8.1 },
-  { stage: "Pro Trial", count: 134, pct: 3.2 },
-  { stage: "Paid", count: 89, pct: 2.1 },
-] as const;
-
-const OPENSOURCE = [
-  { pkg: "@silence/contracts", downloads: "2,340", stars: 12, version: "0.1.0" },
-  { pkg: "@silence/events", downloads: "1,890", stars: 8, version: "0.1.0" },
-  { pkg: "@silence/core", downloads: "3,100", stars: 15, version: "0.1.0" },
-  { pkg: "@silence/archetypes", downloads: "4,560", stars: 23, version: "0.1.0" },
-  { pkg: "@silence/language", downloads: "1,200", stars: 6, version: "0.1.0" },
-  { pkg: "@silence/validator", downloads: "890", stars: 4, version: "0.1.0" },
-  { pkg: "@silence/ui", downloads: "2,100", stars: 11, version: "0.1.0" },
-] as const;
-
-const B2B_PIPELINE = [
-  { client: "Enterprise A", stage: "Active", value: "24k PLN/yr", modules: 4 },
-  { client: "Enterprise B", stage: "Active", value: "36k PLN/yr", modules: 6 },
-  { client: "Institution C", stage: "Pilot", value: "18k PLN/yr", modules: 3 },
-  { client: "Corp D", stage: "Negotiation", value: "48k PLN/yr", modules: 8 },
-  { client: "University E", stage: "Evaluation", value: "12k PLN/yr", modules: 2 },
-] as const;
-
-function Sparkline({ data }: { data: readonly number[] }) {
-  const max = Math.max(...data);
-  const min = Math.min(...data);
-  const range = max - min || 1;
-  const w = 64;
-  const h = 20;
-  const points = data.map((v, i) => {
-    const x = (i / (data.length - 1)) * w;
-    const y = h - ((v - min) / range) * h;
-    return `${x},${y}`;
-  }).join(" ");
+// ─────────────────────────────────────────────────────────────
+// Helpers
+// ─────────────────────────────────────────────────────────────
+function StatusDot({ ok }: { ok: boolean }) {
   return (
-    <svg width={w} height={h} className="inline-block ml-2 opacity-60">
-      <polyline points={points} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+    <span
+      className="w-2 h-2 rounded-full inline-block flex-shrink-0"
+      style={{ background: ok ? "var(--color-success)" : "var(--color-error)" }}
+    />
   );
 }
 
-function HealthDot({ health }: { health: string }) {
-  const color = health === "green" ? "bg-emerald-500" : health === "yellow" ? "bg-amber-500" : health === "red" ? "bg-red-500" : "bg-zinc-600";
-  return <span className={`w-2 h-2 rounded-full ${color} inline-block`} />;
+function formatCurrency(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(0)}k`;
+  return String(n);
 }
 
+// ─────────────────────────────────────────────────────────────
+// Page
+// ─────────────────────────────────────────────────────────────
 export default function DashboardPage() {
+  const revMax = Math.max(...REVENUE_PROJECTION.map((r) => r.arr));
+
   return (
-    <main className="min-h-screen bg-zinc-950 p-4 md:p-8 max-w-7xl mx-auto">
-      {/* Header */}
-      <header className="mb-8">
+    <main
+      className="min-h-screen p-4 md:p-8 max-w-7xl mx-auto"
+      style={{ background: "var(--color-background)", color: "var(--color-text)" }}
+    >
+      {/* ══════════ HEADER ══════════ */}
+      <header className="mb-6">
         <div className="flex items-center gap-3 mb-1">
-          <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">SILENCE.OBJECTS</h1>
-          <span className="text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-mono">v5.0</span>
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+            <circle cx="35" cy="40" r="8" fill="none" stroke="#21808d" strokeWidth="2" opacity="0.6" />
+            <circle cx="85" cy="40" r="8" fill="none" stroke="#21808d" strokeWidth="2" opacity="0.6" />
+            <circle cx="60" cy="70" r="8" fill="none" stroke="#21808d" strokeWidth="2" opacity="0.6" />
+            <line x1="35" y1="40" x2="60" y2="70" stroke="#21808d" strokeWidth="1.5" opacity="0.4" strokeDasharray="4 2" />
+            <line x1="85" y1="40" x2="60" y2="70" stroke="#21808d" strokeWidth="1.5" opacity="0.4" strokeDasharray="4 2" />
+            <line x1="35" y1="40" x2="85" y2="40" stroke="#21808d" strokeWidth="1.5" opacity="0.4" strokeDasharray="4 2" />
+            <rect x="55" y="65" width="10" height="10" fill="#21808d" opacity="0.8" />
+          </svg>
+          <h1 className="text-2xl font-bold tracking-tight" style={{ color: "var(--color-text)" }}>
+            SILENCE.OBJECTS
+          </h1>
+          <span
+            className="text-xs px-2 py-0.5 rounded font-mono"
+            style={{ background: "rgba(50,184,198,0.15)", color: "var(--color-primary)" }}
+          >
+            v5.0
+          </span>
         </div>
-        <p className="text-zinc-500 text-sm">Modular framework for structural behavioral pattern analysis</p>
+        <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
+          Command Center
+        </p>
       </header>
 
-      {/* Tabs */}
-      <nav className="flex flex-wrap gap-2 mb-8 border-b border-zinc-800/40 pb-4">
-        {TABS.map((tab, i) => (
-          <a
-            key={tab.id}
-            href={`#${tab.id}`}
-            className={i === 0
-              ? "px-4 py-2 rounded-lg bg-zinc-100 text-zinc-950 font-medium text-sm"
-              : "px-4 py-2 rounded-lg bg-zinc-800/50 text-zinc-400 text-sm hover:bg-zinc-800 transition-colors"
-            }
-          >
-            {tab.label}
-          </a>
-        ))}
-        <Link
-          href="/investor/dashboard"
-          className="px-4 py-2 rounded-lg bg-zinc-800/50 text-zinc-400 text-sm hover:bg-zinc-800 transition-colors ml-auto"
-        >
-          Investor View
-        </Link>
+      {/* ══════════ TABS ══════════ */}
+      <nav className="flex flex-wrap gap-2 mb-8 pb-4" style={{ borderBottom: "1px solid var(--color-border)" }}>
+        {TABS.map((tab) => {
+          const isActive = "active" in tab && tab.active;
+          const baseClass = "px-4 py-2 rounded-lg text-sm transition-colors";
+          const cls = isActive
+            ? `${baseClass} font-medium`
+            : `${baseClass} hover:opacity-80`;
+          const style = isActive
+            ? { background: "var(--color-primary)", color: "#0f1010" }
+            : { background: "var(--color-surface)", color: "var(--color-text-secondary)" };
+
+          if ("href" in tab && tab.href) {
+            return (
+              <Link key={tab.id} href={tab.href} className={cls} style={style}>
+                {tab.label}
+              </Link>
+            );
+          }
+          return (
+            <a key={tab.id} href={`#${tab.id}`} className={cls} style={style}>
+              {tab.label}
+            </a>
+          );
+        })}
       </nav>
 
-      {/* ═══════════════════════════ OVERVIEW ═══════════════════════════ */}
-      <section id="overview">
-        {/* KPI Grid with Sparklines */}
-        <div className="mb-8">
-          <h2 className="text-xs text-zinc-500 uppercase tracking-widest mb-4">Key Metrics</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {METRICS.map((m) => (
-              <div key={m.label} className="rounded-xl border border-zinc-800/60 bg-zinc-900/50 p-4 md:p-5">
-                <div className="flex items-center justify-between">
-                  <p className="text-xs text-zinc-500 uppercase tracking-wide">{m.label}</p>
-                  <Sparkline data={m.spark} />
-                </div>
-                <p className="text-xl md:text-2xl font-bold text-zinc-100 mt-1">{m.value}</p>
-                {'trend' in m && m.trend && (
-                  <p className="text-xs text-emerald-400 mt-1">{m.trend}</p>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
+      {/* ══════════════════════════════════════════════════════════════
+           BAND 1: HERO KPIs
+         ══════════════════════════════════════════════════════════════ */}
+      <section className="mb-6">
+        <h2
+          className="text-sm font-semibold uppercase tracking-wide mb-4"
+          style={{ color: "var(--color-text-secondary)" }}
+        >
+          Hero KPIs
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-[40%_35%_25%] gap-4">
+          {/* Card 1: Safety Status */}
+          <div
+            className="rounded-lg p-4 md:p-5"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-border)",
+            }}
+          >
+            <p
+              className="text-xs uppercase tracking-widest mb-3"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
+              Safety Status
+            </p>
 
-        {/* Module Health Grid */}
-        <div className="mb-8">
-          <h2 className="text-xs text-zinc-500 uppercase tracking-widest mb-4">Module Health</h2>
-          <div className="rounded-xl border border-zinc-800/60 bg-zinc-900/50 p-5">
-            <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
-              {MODULES.map((mod) => (
-                <div key={mod.name} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-zinc-800/30 hover:bg-zinc-800/50 transition-colors">
-                  <HealthDot health={mod.health} />
-                  <span className="text-xs text-zinc-400 font-mono truncate">{mod.name.replace('@silence/', '')}</span>
-                </div>
-              ))}
+            <div className="space-y-2 mb-4">
+              <div className="flex items-center gap-2">
+                <StatusDot ok={SAFETY_STATUS.tier1_safety} />
+                <span className="text-xs" style={{ color: "var(--color-text)" }}>
+                  Tier-1 Safety
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <StatusDot ok={SAFETY_STATUS.crisis_detection} />
+                <span className="text-xs" style={{ color: "var(--color-text)" }}>
+                  Crisis Detection
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <StatusDot ok={SAFETY_STATUS.forbidden_vocab_clean} />
+                <span className="text-xs" style={{ color: "var(--color-text)" }}>
+                  Forbidden Vocab Clean
+                </span>
+              </div>
+            </div>
+
+            {/* Compliance score bar */}
+            <div className="mb-2">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
+                  Compliance
+                </span>
+                <span className="font-mono text-2xl font-bold" style={{ color: "var(--color-text)" }}>
+                  {SAFETY_STATUS.compliance_score}%
+                </span>
+              </div>
+              <div className="w-full h-2 rounded-full" style={{ background: "rgba(119,124,124,0.2)" }}>
+                <div
+                  className="h-2 rounded-full"
+                  style={{
+                    width: `${SAFETY_STATUS.compliance_score}%`,
+                    background: "var(--color-success)",
+                  }}
+                />
+              </div>
+            </div>
+
+            <p className="text-xs mt-2" style={{ color: "var(--color-text-secondary)" }}>
+              Last scan: {SAFETY_STATUS.last_scan}
+            </p>
+          </div>
+
+          {/* Card 2: System Flow */}
+          <div
+            className="rounded-lg p-4 md:p-5"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-border)",
+            }}
+          >
+            <p
+              className="text-xs uppercase tracking-widest mb-3"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
+              System Flow
+            </p>
+
+            <div className="flex items-center gap-2 mb-4">
+              <span
+                className="text-xs px-2 py-0.5 rounded-full font-mono"
+                style={{
+                  background:
+                    SYSTEM_FLOW.api_status === "healthy"
+                      ? "rgba(16,185,129,0.15)"
+                      : SYSTEM_FLOW.api_status === "degraded"
+                        ? "rgba(245,158,11,0.15)"
+                        : "rgba(255,84,89,0.15)",
+                  color:
+                    SYSTEM_FLOW.api_status === "healthy"
+                      ? "var(--color-success)"
+                      : SYSTEM_FLOW.api_status === "degraded"
+                        ? "var(--color-warning)"
+                        : "var(--color-error)",
+                }}
+              >
+                {SYSTEM_FLOW.api_status}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <p className="text-xs uppercase tracking-widest" style={{ color: "var(--color-text-secondary)" }}>
+                  Avg Response
+                </p>
+                <p className="font-mono text-2xl font-bold" style={{ color: "var(--color-text)" }}>
+                  {SYSTEM_FLOW.avg_response_ms}<span className="text-xs font-normal">ms</span>
+                </p>
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-widest" style={{ color: "var(--color-text-secondary)" }}>
+                  Success Rate
+                </p>
+                <p className="font-mono text-2xl font-bold" style={{ color: "var(--color-text)" }}>
+                  {SYSTEM_FLOW.successful_flows_pct}%
+                </p>
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-widest" style={{ color: "var(--color-text-secondary)" }}>
+                  Active Modules
+                </p>
+                <p className="font-mono text-2xl font-bold" style={{ color: "var(--color-primary)" }}>
+                  {SYSTEM_FLOW.active_modules}
+                  <span className="text-xs font-normal" style={{ color: "var(--color-text-secondary)" }}>
+                    /{SYSTEM_FLOW.total_modules}
+                  </span>
+                </p>
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-widest" style={{ color: "var(--color-text-secondary)" }}>
+                  Last Deploy
+                </p>
+                <p className="text-xs font-mono mt-1" style={{ color: "var(--color-text)" }}>
+                  {SYSTEM_FLOW.last_deploy}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Applications */}
-        <div className="mb-8">
-          <h2 className="text-xs text-zinc-500 uppercase tracking-widest mb-4">Applications</h2>
-          <div className="grid md:grid-cols-3 gap-3">
-            {APPS.map((app) => (
-              <div key={app.name} className="rounded-xl border border-zinc-800/60 bg-zinc-900/50 p-5">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-semibold text-zinc-100">{app.name}</h3>
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${
-                    app.status === 'live' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-zinc-700/50 text-zinc-500'
-                  }`}>
-                    {app.status}
-                  </span>
-                </div>
-                <p className="text-sm text-zinc-500 mb-3">{app.desc}</p>
-                <a
-                  href={`https://${app.url}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 font-mono transition-colors"
-                >
-                  {app.url} <span className="text-[10px]">{"\u2197"}</span>
-                </a>
+          {/* Card 3: Monetization */}
+          <div
+            className="rounded-lg p-4 md:p-5"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-border)",
+            }}
+          >
+            <p
+              className="text-xs uppercase tracking-widest mb-3"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
+              Monetization
+            </p>
+
+            <div className="mb-3">
+              <p className="text-xs uppercase tracking-widest" style={{ color: "var(--color-text-secondary)" }}>
+                ARR
+              </p>
+              <p className="font-mono text-2xl font-bold" style={{ color: "var(--color-primary)" }}>
+                {formatCurrency(MONETIZATION.arr)} PLN
+              </p>
+            </div>
+
+            <div className="mb-3">
+              <p className="text-xs uppercase tracking-widest" style={{ color: "var(--color-text-secondary)" }}>
+                MRR
+              </p>
+              <div className="flex items-baseline gap-2">
+                <span className="font-mono text-2xl font-bold" style={{ color: "var(--color-text)" }}>
+                  {formatCurrency(MONETIZATION.mrr)}
+                </span>
+                <span className="text-xs font-mono" style={{ color: "var(--color-success)" }}>
+                  {MONETIZATION.mrr_trend}
+                </span>
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
 
-        {/* Recent Events Feed */}
-        <div className="mb-8">
-          <h2 className="text-xs text-zinc-500 uppercase tracking-widest mb-4">Recent Events</h2>
-          <div className="rounded-xl border border-zinc-800/60 bg-zinc-900/50 divide-y divide-zinc-800/30">
-            {EVENTS.map((evt, i) => (
-              <div key={i} className="flex items-start gap-3 px-5 py-3">
-                <span className={`mt-1 w-2 h-2 rounded-full flex-shrink-0 ${
-                  evt.type === 'success' ? 'bg-emerald-500' : evt.type === 'warn' ? 'bg-amber-500' : 'bg-blue-500'
-                }`} />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono text-zinc-300">{evt.event}</span>
-                    <span className="text-[10px] text-zinc-600">{evt.time}</span>
-                  </div>
-                  <p className="text-xs text-zinc-500 mt-0.5 truncate">{evt.detail}</p>
-                </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <p className="text-xs uppercase tracking-widest" style={{ color: "var(--color-text-secondary)" }}>
+                  Paying
+                </p>
+                <p className="font-mono text-lg font-bold" style={{ color: "var(--color-text)" }}>
+                  {MONETIZATION.paying_users}
+                </p>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Growth Charts */}
-        <div className="mb-8">
-          <h2 className="text-xs text-zinc-500 uppercase tracking-widest mb-4">Growth Metrics</h2>
-          <div className="grid md:grid-cols-3 gap-3">
-            {GROWTH.map((metric) => {
-              const max = Math.max(...metric.values);
-              return (
-                <div key={metric.label} className="rounded-xl border border-zinc-800/60 bg-zinc-900/50 p-5">
-                  <p className="text-xs text-zinc-500 uppercase tracking-wide mb-4">{metric.label}</p>
-                  <div className="flex items-end gap-2 h-24">
-                    {metric.values.map((v, i) => {
-                      const pct = (v / max) * 100;
-                      return (
-                        <div key={metric.months[i]} className="flex-1 flex flex-col items-center gap-1">
-                          <span className="text-[10px] text-zinc-400 font-mono">{v}{'suffix' in metric ? metric.suffix : ''}</span>
-                          <div
-                            className="w-full rounded-t bg-emerald-500/60 transition-all"
-                            style={{ height: `${pct}%` }}
-                          />
-                          <span className="text-[10px] text-zinc-600">{metric.months[i]}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
+              <div>
+                <p className="text-xs uppercase tracking-widest" style={{ color: "var(--color-text-secondary)" }}>
+                  Conversion
+                </p>
+                <p className="font-mono text-lg font-bold" style={{ color: "var(--color-text)" }}>
+                  {MONETIZATION.conversion_rate}%
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════ PATTERNLENS ═══════════════════════════ */}
-      <section id="patternlens" className="mb-8">
-        <h2 className="text-xs text-zinc-500 uppercase tracking-widest mb-4">PatternLens — Consumer App</h2>
+      {/* ══════════════════════════════════════════════════════════════
+           BAND 2: HEALTH & RISK
+         ══════════════════════════════════════════════════════════════ */}
+      <section className="mb-6">
+        <h2
+          className="text-sm font-semibold uppercase tracking-wide mb-4"
+          style={{ color: "var(--color-text-secondary)" }}
+        >
+          Health &amp; Risk
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Card 1: Safety Layers */}
+          <div
+            className="rounded-lg p-4 md:p-5"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-border)",
+            }}
+          >
+            <p
+              className="text-xs uppercase tracking-widest mb-4"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
+              Safety Layers
+            </p>
 
-        <div className="grid md:grid-cols-2 gap-4 mb-4">
-          {/* User Metrics */}
-          <div className="rounded-xl border border-zinc-800/60 bg-zinc-900/50 p-5">
-            <h3 className="text-sm font-semibold text-zinc-300 mb-4">User Metrics</h3>
+            <div className="flex flex-col gap-3">
+              {SAFETY_LAYERS.map((layer, i) => (
+                <div key={layer.name}>
+                  <div className="flex items-center gap-3">
+                    {/* Status dot */}
+                    <span
+                      className="w-2 h-2 rounded-full flex-shrink-0"
+                      style={{
+                        background:
+                          layer.status === "ok"
+                            ? "var(--color-success)"
+                            : layer.status === "warn"
+                              ? "var(--color-warning)"
+                              : "var(--color-error)",
+                      }}
+                    />
+                    {/* Layer info */}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-mono truncate" style={{ color: "var(--color-text)" }}>
+                        {layer.name}
+                      </p>
+                      <p className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
+                        {layer.last_test}
+                      </p>
+                    </div>
+                  </div>
+                  {/* Arrow between layers */}
+                  {i < SAFETY_LAYERS.length - 1 && (
+                    <div className="flex justify-center my-1">
+                      <svg width="12" height="16" viewBox="0 0 12 16" style={{ color: "var(--color-primary)" }}>
+                        <path d="M6 0 L6 12 M2 8 L6 12 L10 8" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Card 2: Crisis & Compliance */}
+          <div
+            className="rounded-lg p-4 md:p-5"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-border)",
+            }}
+          >
+            <p
+              className="text-xs uppercase tracking-widest mb-4"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
+              Crisis &amp; Compliance
+            </p>
+
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-zinc-500">DAU</p>
-                <p className="text-lg font-bold text-zinc-100">342</p>
+                <p className="text-xs uppercase tracking-widest" style={{ color: "var(--color-text-secondary)" }}>
+                  Incidents (24h)
+                </p>
+                <p
+                  className="font-mono text-2xl font-bold"
+                  style={{ color: CRISIS_DATA.incidents_24h === 0 ? "var(--color-success)" : "var(--color-error)" }}
+                >
+                  {CRISIS_DATA.incidents_24h}
+                </p>
               </div>
               <div>
-                <p className="text-xs text-zinc-500">MAU</p>
-                <p className="text-lg font-bold text-zinc-100">2,840</p>
+                <p className="text-xs uppercase tracking-widest" style={{ color: "var(--color-text-secondary)" }}>
+                  Incidents (7d)
+                </p>
+                <p
+                  className="font-mono text-2xl font-bold"
+                  style={{ color: CRISIS_DATA.incidents_7d === 0 ? "var(--color-success)" : "var(--color-warning)" }}
+                >
+                  {CRISIS_DATA.incidents_7d}
+                </p>
               </div>
               <div>
-                <p className="text-xs text-zinc-500">Retention (30d)</p>
-                <p className="text-lg font-bold text-emerald-400">68%</p>
+                <p className="text-xs uppercase tracking-widest" style={{ color: "var(--color-text-secondary)" }}>
+                  Forbidden Violations (24h)
+                </p>
+                <p
+                  className="font-mono text-2xl font-bold"
+                  style={{
+                    color: CRISIS_DATA.forbidden_violations_24h === 0 ? "var(--color-success)" : "var(--color-error)",
+                  }}
+                >
+                  {CRISIS_DATA.forbidden_violations_24h}
+                </p>
               </div>
               <div>
-                <p className="text-xs text-zinc-500">Avg Session</p>
-                <p className="text-lg font-bold text-zinc-100">4.2 min</p>
+                <p className="text-xs uppercase tracking-widest" style={{ color: "var(--color-text-secondary)" }}>
+                  Compliance Score
+                </p>
+                <p className="font-mono text-2xl font-bold" style={{ color: "var(--color-success)" }}>
+                  {CRISIS_DATA.copy_compliance_score}%
+                </p>
               </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Conversion Funnel */}
-          <div className="rounded-xl border border-zinc-800/60 bg-zinc-900/50 p-5">
-            <h3 className="text-sm font-semibold text-zinc-300 mb-4">Conversion Funnel</h3>
+      {/* ══════════════════════════════════════════════════════════════
+           BAND 3: AGENTS & STRUCTURES
+         ══════════════════════════════════════════════════════════════ */}
+      <section className="mb-6">
+        <h2
+          className="text-sm font-semibold uppercase tracking-wide mb-4"
+          style={{ color: "var(--color-text-secondary)" }}
+        >
+          Agents &amp; Structures
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-[35%_35%_30%] gap-4">
+          {/* Card 1: Agent Chain */}
+          <div
+            className="rounded-lg p-4 md:p-5"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-border)",
+            }}
+          >
+            <p
+              className="text-xs uppercase tracking-widest mb-4"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
+              Agent Chain
+            </p>
+
             <div className="space-y-2">
-              {FUNNEL.map((step) => (
-                <div key={step.stage} className="flex items-center gap-3">
-                  <span className="text-xs text-zinc-400 w-20 truncate">{step.stage}</span>
-                  <div className="flex-1 h-5 bg-zinc-800/40 rounded overflow-hidden">
-                    <div
-                      className="h-full bg-blue-500/60 rounded flex items-center justify-end pr-2 transition-all"
-                      style={{ width: `${step.pct}%` }}
-                    >
-                      {step.pct > 10 && <span className="text-[10px] text-white font-mono">{step.count}</span>}
+              {AGENT_CHAIN.map((agent, i) => (
+                <div key={agent.step}>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="w-2 h-2 rounded-full flex-shrink-0"
+                      style={{
+                        background:
+                          agent.status === "ok"
+                            ? "var(--color-success)"
+                            : agent.status === "warn"
+                              ? "var(--color-warning)"
+                              : "var(--color-error)",
+                      }}
+                    />
+                    <span className="text-xs font-mono flex-1 truncate" style={{ color: "var(--color-text)" }}>
+                      {agent.step}
+                    </span>
+                    <span className="text-xs font-mono" style={{ color: "var(--color-text-secondary)" }}>
+                      {agent.latency_ms}ms
+                    </span>
+                  </div>
+                  {i < AGENT_CHAIN.length - 1 && (
+                    <div className="flex justify-center my-0.5">
+                      <span className="text-xs" style={{ color: "var(--color-primary)", opacity: 0.5 }}>
+                        |
+                      </span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Card 2: Reports Confidence */}
+          <div
+            className="rounded-lg p-4 md:p-5"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-border)",
+            }}
+          >
+            <p
+              className="text-xs uppercase tracking-widest mb-4"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
+              Reports Confidence
+            </p>
+
+            <div className="space-y-3">
+              {REPORTS_CONFIDENCE.map((phase) => {
+                const barColor =
+                  phase.avg_confidence >= 0.85
+                    ? "#10b981"
+                    : phase.avg_confidence >= 0.7
+                      ? "#32b8c6"
+                      : "#f59e0b";
+                return (
+                  <div key={phase.name}>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-mono" style={{ color: "var(--color-text)" }}>
+                        {phase.name}
+                      </span>
+                      <span className="text-xs font-mono font-bold" style={{ color: barColor }}>
+                        {(phase.avg_confidence * 100).toFixed(0)}%
+                      </span>
+                    </div>
+                    <div className="w-full h-2 rounded-full" style={{ background: "rgba(119,124,124,0.2)" }}>
+                      <div
+                        className="h-2 rounded-full"
+                        style={{
+                          width: `${phase.avg_confidence * 100}%`,
+                          background: barColor,
+                        }}
+                      />
                     </div>
                   </div>
-                  <span className="text-[10px] text-zinc-500 w-10 text-right">{step.pct}%</span>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Card 3: Recent Events */}
+          <div
+            className="rounded-lg p-4 md:p-5 overflow-hidden"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-border)",
+            }}
+          >
+            <p
+              className="text-xs uppercase tracking-widest mb-4"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
+              Recent Events
+            </p>
+
+            <div className="space-y-3 max-h-64 overflow-y-auto">
+              {RECENT_EVENTS.map((evt, i) => (
+                <div key={i} className="flex items-start gap-2">
+                  <span
+                    className="w-2 h-2 rounded-full flex-shrink-0 mt-1"
+                    style={{
+                      background:
+                        evt.type === "success"
+                          ? "var(--color-success)"
+                          : evt.type === "warn"
+                            ? "var(--color-warning)"
+                            : "var(--color-primary)",
+                    }}
+                  />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-mono" style={{ color: "var(--color-text)" }}>
+                        {evt.event}
+                      </span>
+                      <span className="text-xs" style={{ color: "var(--color-text-secondary)", opacity: 0.6 }}>
+                        {evt.time}
+                      </span>
+                    </div>
+                    <p className="text-xs truncate" style={{ color: "var(--color-text-secondary)" }}>
+                      {evt.detail}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Top Archetypes Distribution */}
-        <div className="rounded-xl border border-zinc-800/60 bg-zinc-900/50 p-5 mb-4">
-          <h3 className="text-sm font-semibold text-zinc-300 mb-4">Archetype Distribution (Active Users)</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-            {ARCHETYPES.map((a) => (
-              <div key={a.name} className="rounded-xl border border-zinc-800/40 bg-zinc-900/30 p-4 hover:bg-zinc-900/60 transition-colors">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold ${a.color}`}>
-                    {a.icon}
+      {/* ══════════════════════════════════════════════════════════════
+           BAND 4: BUSINESS
+         ══════════════════════════════════════════════════════════════ */}
+      <section className="mb-6">
+        <h2
+          className="text-sm font-semibold uppercase tracking-wide mb-4"
+          style={{ color: "var(--color-text-secondary)" }}
+        >
+          Business
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-4">
+          {/* Card 1: Paywall Funnel */}
+          <div
+            className="rounded-lg p-4 md:p-5"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-border)",
+            }}
+          >
+            <p
+              className="text-xs uppercase tracking-widest mb-4"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
+              Paywall Funnel
+            </p>
+
+            <div className="space-y-2">
+              {PAYWALL_FUNNEL.map((step) => (
+                <div key={step.step} className="flex items-center gap-3">
+                  <span
+                    className="text-xs w-36 truncate flex-shrink-0"
+                    style={{ color: "var(--color-text-secondary)" }}
+                  >
+                    {step.step}
                   </span>
-                  <span className="text-sm font-semibold text-zinc-200">{a.name}</span>
+                  <div className="flex-1 h-5 rounded overflow-hidden" style={{ background: "rgba(119,124,124,0.15)" }}>
+                    <div
+                      className="h-full rounded flex items-center justify-end pr-2"
+                      style={{
+                        width: `${step.pct}%`,
+                        background: "rgba(50,184,198,0.5)",
+                        minWidth: step.pct > 0 ? "2rem" : "0",
+                      }}
+                    >
+                      <span className="text-xs font-mono" style={{ color: "var(--color-text)" }}>
+                        {step.count}
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-xs font-mono w-12 text-right" style={{ color: "var(--color-text-secondary)" }}>
+                    {step.pct}%
+                  </span>
                 </div>
-                <p className="text-xs text-zinc-500 leading-relaxed">{a.desc}</p>
+              ))}
+            </div>
+          </div>
+
+          {/* Card 2: Revenue Projection */}
+          <div
+            className="rounded-lg p-4 md:p-5"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-border)",
+            }}
+          >
+            <p
+              className="text-xs uppercase tracking-widest mb-4"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
+              Revenue Projection (ARR)
+            </p>
+
+            <div className="flex items-end gap-3 h-40">
+              {REVENUE_PROJECTION.map((proj) => {
+                const pct = (proj.arr / revMax) * 100;
+                return (
+                  <div key={proj.period} className="flex-1 flex flex-col items-center gap-1 h-full justify-end">
+                    <span className="text-xs font-mono font-bold" style={{ color: "var(--color-primary)" }}>
+                      {formatCurrency(proj.arr)}
+                    </span>
+                    <div
+                      className="w-full rounded-t"
+                      style={{
+                        height: `${pct}%`,
+                        background: "rgba(50,184,198,0.5)",
+                        minHeight: "4px",
+                      }}
+                    />
+                    <span className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
+                      {proj.period}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════
+           BAND 5: OPS
+         ══════════════════════════════════════════════════════════════ */}
+      <section className="mb-6">
+        <h2
+          className="text-sm font-semibold uppercase tracking-wide mb-4"
+          style={{ color: "var(--color-text-secondary)" }}
+        >
+          Ops
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Card 1: Phase Progress */}
+          <div
+            className="rounded-lg p-4 md:p-5"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-border)",
+            }}
+          >
+            <p
+              className="text-xs uppercase tracking-widest mb-4"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
+              Phase Progress
+            </p>
+
+            <div className="space-y-3">
+              {PHASE_PROGRESS.map((phase) => (
+                <div key={phase.name}>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-mono" style={{ color: "var(--color-text)" }}>
+                      {phase.name}
+                    </span>
+                    <span className="text-xs font-mono font-bold" style={{ color: "var(--color-text)" }}>
+                      {phase.progress}%
+                    </span>
+                  </div>
+                  <div className="w-full h-2 rounded-full" style={{ background: "rgba(119,124,124,0.2)" }}>
+                    <div
+                      className="h-2 rounded-full"
+                      style={{
+                        width: `${phase.progress}%`,
+                        background:
+                          phase.status === "active"
+                            ? "var(--color-primary)"
+                            : "rgba(119,124,124,0.4)",
+                        minWidth: phase.progress > 0 ? "4px" : "0",
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Card 2: CI/CD Status */}
+          <div
+            className="rounded-lg p-4 md:p-5"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-border)",
+            }}
+          >
+            <p
+              className="text-xs uppercase tracking-widest mb-4"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
+              CI/CD Status
+            </p>
+
+            <div className="space-y-2 mb-4">
+              {(
+                [
+                  ["Sentinel Vocabulary", CI_CD_STATUS.sentinel_vocabulary],
+                  ["Sentinel Build", CI_CD_STATUS.sentinel_build],
+                  ["Sentinel Contracts", CI_CD_STATUS.sentinel_contracts],
+                ] as const
+              ).map(([label, check]) => (
+                <div key={label} className="flex items-center gap-2">
+                  <span
+                    className="w-2 h-2 rounded-full flex-shrink-0"
+                    style={{
+                      background: check.status === "pass" ? "var(--color-success)" : "var(--color-error)",
+                    }}
+                  />
+                  <span className="text-xs font-mono flex-1" style={{ color: "var(--color-text)" }}>
+                    {label}
+                  </span>
+                  <span className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
+                    {check.last_run}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <div
+              className="rounded-lg p-3 mt-3"
+              style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.2)" }}
+            >
+              <p className="text-xs uppercase tracking-widest mb-1" style={{ color: "var(--color-text-secondary)" }}>
+                Last Deploy
+              </p>
+              <div className="flex items-center gap-2">
+                <span
+                  className="w-2 h-2 rounded-full"
+                  style={{
+                    background:
+                      CI_CD_STATUS.last_deploy.status === "success"
+                        ? "var(--color-success)"
+                        : "var(--color-error)",
+                  }}
+                />
+                <span className="text-xs font-mono" style={{ color: "var(--color-text)" }}>
+                  {CI_CD_STATUS.last_deploy.env}
+                </span>
+                <span className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
+                  {CI_CD_STATUS.last_deploy.at}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════ MODULE GRID ══════════ */}
+      <section className="mb-6">
+        <h2
+          className="text-sm font-semibold uppercase tracking-wide mb-4"
+          style={{ color: "var(--color-text-secondary)" }}
+        >
+          Modules ({MODULE_STATUS.length})
+        </h2>
+        <div
+          className="rounded-lg p-4 md:p-5"
+          style={{
+            background: "var(--color-surface)",
+            border: "1px solid var(--color-border)",
+          }}
+        >
+          <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
+            {MODULE_STATUS.map((mod) => (
+              <div
+                key={mod.name}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg"
+                style={{ background: "rgba(119,124,124,0.08)" }}
+              >
+                <span
+                  className="w-2 h-2 rounded-full flex-shrink-0"
+                  style={{
+                    background: mod.status === "ready" ? "var(--color-success)" : "rgba(119,124,124,0.4)",
+                  }}
+                />
+                <span className="text-xs font-mono truncate" style={{ color: "var(--color-text)" }}>
+                  {mod.name}
+                </span>
+                <span
+                  className="text-xs ml-auto flex-shrink-0"
+                  style={{
+                    color: mod.type === "open" ? "var(--color-primary)" : "var(--color-warning)",
+                    opacity: 0.7,
+                  }}
+                >
+                  {mod.type === "open" ? "O" : "C"}
+                </span>
               </div>
             ))}
           </div>
         </div>
-
-        <a
-          href="https://silence-patternlens.vercel.app"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium transition-colors"
-        >
-          Open PatternLens {"\u2197"}
-        </a>
       </section>
 
-      {/* ═══════════════════════════ PATTERNSLAB ═══════════════════════════ */}
-      <section id="patternslab" className="mb-8">
-        <h2 className="text-xs text-zinc-500 uppercase tracking-widest mb-4">PatternsLab — B2B Institutional</h2>
-
-        <div className="grid md:grid-cols-2 gap-4 mb-4">
-          {/* B2B Pipeline */}
-          <div className="rounded-xl border border-zinc-800/60 bg-zinc-900/50 p-5">
-            <h3 className="text-sm font-semibold text-zinc-300 mb-4">Client Pipeline</h3>
-            <div className="space-y-3">
-              {B2B_PIPELINE.map((client) => (
-                <div key={client.client} className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-zinc-200">{client.client}</p>
-                    <p className="text-xs text-zinc-500">{client.modules} modules</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm text-zinc-100 font-mono">{client.value}</p>
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full ${
-                      client.stage === 'Active' ? 'bg-emerald-500/20 text-emerald-400'
-                      : client.stage === 'Pilot' ? 'bg-blue-500/20 text-blue-400'
-                      : client.stage === 'Negotiation' ? 'bg-amber-500/20 text-amber-400'
-                      : 'bg-zinc-700/50 text-zinc-500'
-                    }`}>
-                      {client.stage}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Contract Value */}
-          <div className="rounded-xl border border-zinc-800/60 bg-zinc-900/50 p-5">
-            <h3 className="text-sm font-semibold text-zinc-300 mb-4">Contract Value Tracker</h3>
-            <div className="space-y-4">
-              <div>
-                <p className="text-xs text-zinc-500">Active Contracts</p>
-                <p className="text-2xl font-bold text-zinc-100">60k PLN<span className="text-sm text-zinc-500">/yr</span></p>
-              </div>
-              <div>
-                <p className="text-xs text-zinc-500">Pipeline Value</p>
-                <p className="text-2xl font-bold text-zinc-100">78k PLN<span className="text-sm text-zinc-500">/yr</span></p>
-              </div>
-              <div>
-                <p className="text-xs text-zinc-500">Total Potential</p>
-                <p className="text-2xl font-bold text-emerald-400">138k PLN<span className="text-sm text-zinc-500">/yr</span></p>
-              </div>
-              <div className="pt-2 border-t border-zinc-800/40">
-                <p className="text-xs text-zinc-500">Feature Adoption</p>
-                <div className="grid grid-cols-3 gap-2 mt-2">
-                  {["Safety", "Language", "Voice"].map(f => (
-                    <div key={f} className="text-center">
-                      <p className="text-sm font-bold text-zinc-200">100%</p>
-                      <p className="text-[10px] text-zinc-500">{f}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════ MODULES ═══════════════════════════ */}
-      <section id="modules" className="mb-8">
-        <h2 className="text-xs text-zinc-500 uppercase tracking-widest mb-4">
-          Framework Modules ({MODULES.length}) &mdash; {MODULES.filter(m => m.status === 'ready').length} ready, {MODULES.filter(m => m.status === 'planned').length} planned
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-          {MODULES.map((mod) => (
-            <div key={mod.name} className="rounded-lg border border-zinc-800/40 bg-zinc-900/30 px-4 py-3 hover:bg-zinc-900/50 transition-colors group">
-              <div className="flex items-center justify-between mb-1">
-                <div className="flex items-center gap-2">
-                  <HealthDot health={mod.health} />
-                  <span className="text-sm text-zinc-300 font-mono">{mod.name}</span>
-                </div>
-                <div className="flex gap-1.5">
-                  <span className={`text-xs px-2 py-0.5 rounded ${
-                    mod.type === 'open' ? 'bg-blue-500/10 text-blue-400' : 'bg-amber-500/10 text-amber-400'
-                  }`}>
-                    {mod.type}
-                  </span>
-                  <span className={`text-xs px-2 py-0.5 rounded ${
-                    mod.status === 'ready' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-zinc-700/50 text-zinc-500'
-                  }`}>
-                    {mod.status}
-                  </span>
-                </div>
-              </div>
-              <p className="text-xs text-zinc-600 ml-4">{mod.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ═══════════════════════════ OPEN SOURCE ═══════════════════════════ */}
-      <section id="opensource" className="mb-8">
-        <h2 className="text-xs text-zinc-500 uppercase tracking-widest mb-4">Open Source Packages</h2>
-
-        <div className="grid md:grid-cols-2 gap-4 mb-4">
-          {/* npm Downloads */}
-          <div className="rounded-xl border border-zinc-800/60 bg-zinc-900/50 p-5">
-            <h3 className="text-sm font-semibold text-zinc-300 mb-4">npm Downloads (weekly)</h3>
-            <div className="space-y-3">
-              {OPENSOURCE.map((pkg) => (
-                <div key={pkg.pkg} className="flex items-center justify-between">
-                  <span className="text-xs text-zinc-400 font-mono">{pkg.pkg.replace('@silence/', '')}</span>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs text-zinc-300 font-mono">{pkg.downloads}</span>
-                    <span className="text-xs text-zinc-500">v{pkg.version}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* GitHub Stats */}
-          <div className="rounded-xl border border-zinc-800/60 bg-zinc-900/50 p-5">
-            <h3 className="text-sm font-semibold text-zinc-300 mb-4">GitHub</h3>
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <div>
-                <p className="text-xs text-zinc-500">Stars</p>
-                <p className="text-2xl font-bold text-zinc-100">79</p>
-              </div>
-              <div>
-                <p className="text-xs text-zinc-500">Forks</p>
-                <p className="text-2xl font-bold text-zinc-100">12</p>
-              </div>
-              <div>
-                <p className="text-xs text-zinc-500">Open Issues</p>
-                <p className="text-2xl font-bold text-zinc-100">8</p>
-              </div>
-              <div>
-                <p className="text-xs text-zinc-500">Contributors</p>
-                <p className="text-2xl font-bold text-zinc-100">3</p>
-              </div>
-            </div>
-            <div>
-              <p className="text-xs text-zinc-500 mb-2">Latest Releases</p>
-              <div className="space-y-1">
-                <p className="text-xs text-zinc-400"><span className="text-emerald-400">v5.0.0</span> — Full product buildout (Feb 2026)</p>
-                <p className="text-xs text-zinc-400"><span className="text-zinc-500">v4.1.0</span> — PatternLens PWA launch</p>
-                <p className="text-xs text-zinc-400"><span className="text-zinc-500">v4.0.0</span> — Monorepo migration</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Architecture */}
-      <section className="rounded-xl border border-zinc-800/60 bg-zinc-900/50 p-5 mb-8">
-        <h2 className="text-xs text-zinc-500 uppercase tracking-widest mb-4">Architecture</h2>
-        <pre className="text-xs text-zinc-400 font-mono overflow-x-auto">{`SILENCE.OBJECTS/
-\u251C\u2500\u2500 apps/
-\u2502   \u251C\u2500\u2500 portal/          \u2192 Dashboard + Investor     [LIVE]
-\u2502   \u251C\u2500\u2500 patternlens/     \u2192 Consumer PWA             [LIVE]
-\u2502   \u2514\u2500\u2500 patternslab/     \u2192 B2B Institutional        [LIVE]
-\u251C\u2500\u2500 packages/
-\u2502   \u251C\u2500\u2500 contracts/       \u2192 TypeScript types          [OPEN]
-\u2502   \u251C\u2500\u2500 events/          \u2192 Event bus                 [OPEN]
-\u2502   \u251C\u2500\u2500 core/            \u2192 Pattern detection         [OPEN]
-\u2502   \u251C\u2500\u2500 archetypes/      \u2192 12 Jungian archetypes    [OPEN]
-\u2502   \u251C\u2500\u2500 voice/           \u2192 Voice input (Whisper)     [CLOSED]
-\u2502   \u251C\u2500\u2500 safety/          \u2192 Crisis detection          [CLOSED]
-\u2502   \u2514\u2500\u2500 ...15 total modules
-\u251C\u2500\u2500 agents/sentinel/     \u2192 CI/CD Quality Gate
-\u251C\u2500\u2500 docs/                \u2192 17 framework docs
-\u2514\u2500\u2500 supabase/            \u2192 Migrations + schema`}</pre>
-      </section>
-
-      {/* Footer */}
-      <footer className="mt-12 pt-6 border-t border-zinc-800/40 text-center">
-        <p className="text-xs text-zinc-600">SILENCE.OBJECTS v5.0 — Open Core Framework</p>
-        <p className="text-xs text-zinc-700 mt-1">github.com/Patternslab-ecosystem/SILENCE.OBJECTS</p>
+      {/* ══════════ FOOTER ══════════ */}
+      <footer
+        className="mt-12 pt-6 text-center"
+        style={{ borderTop: "1px solid var(--color-border)" }}
+      >
+        <p className="text-xs" style={{ color: "var(--color-text-secondary)", opacity: 0.6 }}>
+          SILENCE.OBJECTS v5.0 — Open Core Framework
+        </p>
       </footer>
     </main>
   );

@@ -53,7 +53,7 @@ export default function DashboardPage() {
                 <span
                   className={`block px-3 py-2 rounded text-sm cursor-default ${
                     index === 0
-                      ? "bg-lab-900 text-lab-100"
+                      ? "bg-[#7c3aed]/20 text-[#7c3aed] border-l-2 border-[#7c3aed]"
                       : "text-lab-500 hover:text-lab-300 hover:bg-lab-900"
                   } transition-colors`}
                 >

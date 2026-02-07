@@ -73,7 +73,7 @@ export default function HomePage() {
         <section className="max-w-4xl mx-auto px-8 pb-32 text-center">
           <a
             href="mailto:access@patternslab.app"
-            className="inline-block bg-lab-800 text-lab-100 px-8 py-3 text-sm font-medium tracking-wide uppercase rounded hover:bg-lab-700 transition-colors"
+            className="inline-block bg-[#7c3aed] hover:bg-[#6d28d9] text-white px-8 py-3 text-sm font-medium tracking-wide uppercase rounded transition-colors"
           >
             Request Access
           </a>
