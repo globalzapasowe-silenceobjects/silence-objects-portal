@@ -24,6 +24,7 @@ const TABS = [
   { id: "patternlens", label: "PatternLens" },
   { id: "patternslab", label: "PatternsLab" },
   { id: "modules", label: "Modules" },
+  { id: "agents", label: "Agents", href: "#agents" },
   { id: "opensource", label: "Open Source" },
 ] as const;
 
@@ -871,6 +872,173 @@ export default function DashboardPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════
+           AGENTS
+         ══════════════════════════════════════════════════════════════ */}
+      <section id="agents" className="mb-6">
+        <h2
+          className="text-sm font-semibold uppercase tracking-wide mb-4"
+          style={{ color: "var(--color-text-secondary)" }}
+        >
+          Agents
+        </h2>
+
+        {/* Layer 0 — Guardian (Sentinel) */}
+        <div className="mb-6">
+          <h3
+            className="text-xs font-semibold uppercase tracking-wide mb-3"
+            style={{ color: "var(--color-primary)" }}
+          >
+            Layer 0 — Guardian (Sentinel)
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {[
+              { name: "Terminology Guard", status: "active" as const },
+              { name: "Contracts Guard", status: "active" as const },
+              { name: "Dependency Guard", status: "active" as const },
+              { name: "Closed Module Guard", status: "active" as const },
+              { name: "Type Safety Guard", status: "planned" as const },
+              { name: "Security Guard", status: "planned" as const },
+              { name: "Build Guard", status: "active" as const, label: "via GitHub Actions" },
+            ].map((guard) => (
+              <div
+                key={guard.name}
+                className="rounded-lg p-4"
+                style={{
+                  background: "var(--color-surface)",
+                  border: "1px solid var(--color-border)",
+                }}
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <span
+                    className="w-2 h-2 rounded-full flex-shrink-0"
+                    style={{
+                      background:
+                        guard.status === "active"
+                          ? "var(--color-success)"
+                          : "rgba(119,124,124,0.4)",
+                    }}
+                  />
+                  <span className="text-xs font-mono" style={{ color: "var(--color-text)" }}>
+                    {guard.name}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span
+                    className="text-xs"
+                    style={{
+                      color:
+                        guard.status === "active"
+                          ? "var(--color-success)"
+                          : "var(--color-text-secondary)",
+                    }}
+                  >
+                    {guard.status === "active" ? "Active" : "Planned"}
+                  </span>
+                  {"label" in guard && guard.label && (
+                    <span
+                      className="text-xs px-1.5 py-0.5 rounded"
+                      style={{
+                        background: "rgba(50,184,198,0.15)",
+                        color: "var(--color-primary)",
+                        fontSize: "10px",
+                      }}
+                    >
+                      {guard.label}
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Layer 1 — Revenue Engine (Planned) */}
+        <div className="mb-6">
+          <h3
+            className="text-xs font-semibold uppercase tracking-wide mb-3"
+            style={{ color: "var(--color-text-secondary)" }}
+          >
+            Layer 1 — Revenue Engine (Planned)
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            {["Analytics Reporter", "Sales Autopilot", "Customer Success"].map((name) => (
+              <div
+                key={name}
+                className="rounded-lg p-4"
+                style={{
+                  background: "var(--color-surface)",
+                  border: "1px solid var(--color-border)",
+                  opacity: 0.6,
+                }}
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <span
+                    className="w-2 h-2 rounded-full flex-shrink-0"
+                    style={{ background: "rgba(119,124,124,0.4)" }}
+                  />
+                  <span className="text-xs font-mono" style={{ color: "var(--color-text)" }}>
+                    {name}
+                  </span>
+                </div>
+                <span className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
+                  Planned
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Layer 2 — Growth Army (Planned) */}
+        <div className="mb-6">
+          <h3
+            className="text-xs font-semibold uppercase tracking-wide mb-3"
+            style={{ color: "var(--color-text-secondary)" }}
+          >
+            Layer 2 — Growth Army (Planned)
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            {["LinkedIn Dominator", "Content Machine", "Social Swarm"].map((name) => (
+              <div
+                key={name}
+                className="rounded-lg p-4"
+                style={{
+                  background: "var(--color-surface)",
+                  border: "1px solid var(--color-border)",
+                  opacity: 0.6,
+                }}
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <span
+                    className="w-2 h-2 rounded-full flex-shrink-0"
+                    style={{ background: "rgba(119,124,124,0.4)" }}
+                  />
+                  <span className="text-xs font-mono" style={{ color: "var(--color-text)" }}>
+                    {name}
+                  </span>
+                </div>
+                <span className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
+                  Planned
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Operational cost */}
+        <div
+          className="rounded-lg p-3 text-center"
+          style={{
+            background: "rgba(50,184,198,0.08)",
+            border: "1px solid rgba(50,184,198,0.2)",
+          }}
+        >
+          <span className="text-xs font-mono" style={{ color: "var(--color-text-secondary)" }}>
+            Operational cost: ~&#8364;5.80/mo (Sentinel) + $0 (GitHub Actions free tier)
+          </span>
         </div>
       </section>
 
